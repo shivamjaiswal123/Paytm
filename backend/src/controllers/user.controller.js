@@ -109,8 +109,6 @@ const getUsers = async(req, res) => {
         ]
     })
 
-    console.log(searchedUsers)
-
     if(!searchedUsers){
         res.json({
             msg: "Not found"
@@ -122,9 +120,18 @@ const getUsers = async(req, res) => {
     })
 }
 
+const getAllUsers = async(req, res) => {
+    const users = await User.find({ _id: { $ne: req.userId }}).select("-password -email")
+
+    res.json({
+        users
+    })
+}
+
 
 module.exports = {
     signup,
     signin,
-    getUsers
+    getUsers,
+    getAllUsers
 }

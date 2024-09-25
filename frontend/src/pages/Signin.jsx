@@ -7,6 +7,30 @@ import Button from '../components/Button'
 import AccountInstruction from '../components/AccountInstruction'
 
 export default function Signin() {
+    async function handleClick() {
+        try {
+          event.preventDefault();
+          const res = await fetch("http://localhost:3000/api/v1/user/signin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email,
+              password
+            })
+          });
+          const data = await res.json();
+          if (data.msg) {
+            localStorage.setItem("accessToken", data.token);
+            navigate("/");
+          }else{
+            alert("Failed")
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
     return (
         <div>
             <FormCard>
@@ -16,7 +40,7 @@ export default function Signin() {
                 <form action="">
                     <Input lable="Email" placeholder="johndoe@gmail.com"/>
                     <Input lable="Password"/>
-                    <Button label="Sign In"/>
+                    <Button onClick={handleClick} label="Sign In"/>
                     <AccountInstruction label="Don't have an account? " nav="Sign up" route="/signup"/>
                 </form>
             </FormCard>
